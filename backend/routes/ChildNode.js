@@ -41,13 +41,27 @@ class ChildNode {
     return this.passwords;
   }
 
+  // find password by username and url
+  findPassword(username, url) {
+    for (let i = 0; i < this.passwords.length; i++) {
+      if (
+        this.passwords[i].getUsername() === username &&
+        this.passwords[i].getUrl() === url
+      ) {
+        return this.passwords[i];
+      }
+    }
+    return null;
+  }
+
   // Add a password to the list
   addPassword(password) {
     this.passwords.push(password);
   }
 
   // Remove a password from the list
-  removePassword(index) {
+  removePassword(password) {
+    let index = this.passwords.indexOf(password);
     this.passwords.splice(index, 1);
   }
 

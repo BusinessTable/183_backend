@@ -3,6 +3,8 @@ var router = express.Router();
 require("dotenv").config();
 var session = require("express-session");
 const MotherNode = require("./MotherNode.js");
+const Child = require("./ChildNode.js");
+const Password = require("./Password.js");
 
 const motherNode = new MotherNode();
 
@@ -38,30 +40,37 @@ router.post("/login", (req, res) => {
   }
 });
 
-router.post("/addPassword", (req, res) => {
+router.post("/passwords", (req, res) => {
   const { username, password } = req.body;
+
+  const pwd = new Password();
+  pwd.setType(password.type);
+  pwd.setPwd(password.pwd);
+  pwd.setUrl(password.url);
+  pwd.setNotes(password.notes);
+  pwd.setUsername(username);
 
   const child = motherNode.searchChild(username);
   if (child) {
-    child.addPassword(password);
+    child.addPassword(pwd);
     res.send("Password Added");
   } else {
     res.send("Child Not Found");
   }
 });
 
-router.post("/removePassword", (req, res) => {
-  const { username, index } = req.body;
+router.delete("/passwords", (req, res) => {
+  const { username, password } = req.body;
   const child = motherNode.searchChild(username);
   if (child) {
-    child.removePassword(index);
+    child.removePassword(child.findPassword(username, password.url));
     res.send("Password Removed");
   } else {
     res.send("Child Not Found");
   }
 });
 
-router.post("/updatePassword", (req, res) => {
+router.put("/passwords", (req, res) => {
   const { username, index, password } = req.body;
   const child = motherNode.searchChild(username);
   if (child) {
@@ -72,7 +81,7 @@ router.post("/updatePassword", (req, res) => {
   }
 });
 
-router.get("/getPasswords", (req, res) => {
+router.get("/passwords", (req, res) => {
   const { username } = req.body;
   const child = motherNode.searchChild(username);
   if (child) {
