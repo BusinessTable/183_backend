@@ -1,7 +1,7 @@
 class ChildNode {
-  constructor() {
-    this.username = "";
-    this.masterpassword = "";
+  constructor(username, masterpassword) {
+    this.username = username;
+    this.masterpassword = masterpassword;
     this.recoveryWords = [];
     this.passwords = [];
   }
