@@ -7,16 +7,16 @@ const MotherNode = require("./MotherNode.js");
 const motherNode = new MotherNode();
 
 // Middleware to authorize the user via masterpassword
-const authorize = (req, res, next) => {
-  const { username, masterPassword } = req.body;
-  if (motherNode.validateMasterPassword(username, masterPassword)) {
-    next();
-  } else {
-    res.send("Unauthorized");
-  }
-};
+// const authorize = (req, res, next) => {
+//   const { username, masterPassword } = req.body;
+//   if (motherNode.validateMasterPassword(username, masterPassword)) {
+//     next();
+//   } else {
+//     res.send("Unauthorized");
+//   }
+// };
 
-router.use(authorize);
+// router.use(authorize);
 
 router.get("/ping", (req, res) => {
   res.send(new Date());
