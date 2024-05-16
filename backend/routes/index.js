@@ -28,7 +28,7 @@ router.post("/register", (req, res) => {
   const { username, masterPassword } = req.body;
   const child = new Child(username, masterPassword);
   motherNode.addChild(child);
-  res.send("Registered");
+  res.send(child);
 });
 
 router.post("/login", (req, res) => {
