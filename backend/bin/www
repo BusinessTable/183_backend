@@ -3,32 +3,38 @@
 /**
  * Module dependencies.
  */
-var fs = require('fs');
-var app = require('../app');
-var debug = require('debug')('backend:server');
-var https = require('https');
+var fs = require("fs");
+var app = require("../app");
+var debug = require("debug")("backend:server");
+var https = require("https");
 
-var privateKey  = fs.readFileSync('/etc/ssl/private/apache-selfsigned.key', 'utf8');
-var certificate = fs.readFileSync('/etc/ssl/certs/apache-selfsigned.crt', 'utf8');
+var privateKey = fs.readFileSync(
+  "/etc/ssl/private/apache-selfsigned.key",
+  "utf8"
+);
+var certificate = fs.readFileSync(
+  "/etc/ssl/certs/apache-selfsigned.crt",
+  "utf8"
+);
 
 /**
  * Get port from environment and store in Express.
  */
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+var port = normalizePort(process.env.PORT || "5005");
+app.set("port", port);
 
 /**
  * Create HTTP server.
  */
-var credentials = {key: privateKey, cert: certificate};
+var credentials = { key: privateKey, cert: certificate };
 var httpsServer = https.createServer(credentials, app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 httpsServer.listen(port);
-httpsServer.on('error', onError);
-httpsServer.on('listening', onListening);
+httpsServer.on("error", onError);
+httpsServer.on("listening", onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -55,22 +61,20 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== "listen") {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
       process.exit(1);
       break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
       process.exit(1);
       break;
     default:
@@ -84,8 +88,6 @@ function onError(error) {
 
 function onListening() {
   var addr = httpsServer.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  debug("Listening on " + bind);
 }
