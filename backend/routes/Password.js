@@ -41,3 +41,5 @@ class Password {
     return this.notes;
   }
 }
+
+module.exports = Password;

@@ -56,3 +56,5 @@ class ChildNode {
     this.passwords[index] = password;
   }
 }
+
+module.exports = ChildNode;

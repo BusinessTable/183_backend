@@ -57,3 +57,5 @@ class MotherNode {
     return false;
   }
 }
+
+module.exports = MotherNode;

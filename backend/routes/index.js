@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 require("dotenv").config();
 var session = require("express-session");
+const MotherNode = require("./MotherNode.js");
 
 const motherNode = new MotherNode();
 
