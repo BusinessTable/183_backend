@@ -63,7 +63,7 @@ router.delete("/passwords", (req, res) => {
   const { username, password } = req.body;
   const child = motherNode.searchChild(username);
   if (child) {
-    child.removePassword(child.findPassword(username, password.url));
+    child.removePassword(child.findPassword(password));
     res.send("Password Removed");
   } else {
     res.send("Child Not Found");
@@ -71,10 +71,10 @@ router.delete("/passwords", (req, res) => {
 });
 
 router.put("/passwords", (req, res) => {
-  const { username, index, password } = req.body;
+  const { username, password, newPassword } = req.body;
   const child = motherNode.searchChild(username);
   if (child) {
-    child.updatePassword(index, password);
+    child.updatePassword(child.findPassword(password), newPassword);
     res.send("Password Updated");
   } else {
     res.send("Child Not Found");

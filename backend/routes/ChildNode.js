@@ -42,12 +42,9 @@ class ChildNode {
   }
 
   // find password by username and url
-  findPassword(username, url) {
+  findPassword(password) {
     for (let i = 0; i < this.passwords.length; i++) {
-      if (
-        this.passwords[i].getUsername() === username &&
-        this.passwords[i].getUrl() === url
-      ) {
+      if (this.passwords[i] === password) {
         return this.passwords[i];
       }
     }
@@ -66,8 +63,9 @@ class ChildNode {
   }
 
   // Update a password in the list
-  updatePassword(index, password) {
-    this.passwords[index] = password;
+  updatePassword(password, newPassword) {
+    let index = this.passwords.indexOf(password);
+    this.passwords[index] = newPassword;
   }
 }
 
