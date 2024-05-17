@@ -6,13 +6,29 @@ const MotherNode = require("./MotherNode.js");
 const Child = require("./ChildNode.js");
 const Password = require("./Password.js");
 
-var cors = require("cors");
-var app = express();
+// Add headers before the routes are defined
+app.use(function (req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
-app.use(cors());
+  // Request methods you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
 
-app.listen(80, function () {
-  console.log("CORS-enabled web server listening on port 80");
+  // Request headers you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
+  // Pass to next layer of middleware
+  next();
 });
 
 const motherNode = new MotherNode();
