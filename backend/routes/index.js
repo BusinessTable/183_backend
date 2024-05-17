@@ -6,6 +6,15 @@ const MotherNode = require("./MotherNode.js");
 const Child = require("./ChildNode.js");
 const Password = require("./Password.js");
 
+var cors = require("cors");
+var app = express();
+
+app.use(cors());
+
+app.listen(80, function () {
+  console.log("CORS-enabled web server listening on port 80");
+});
+
 const motherNode = new MotherNode();
 
 // Middleware to authorize the user via masterpassword
@@ -90,10 +99,10 @@ router.put("/passwords", (req, res) => {
   newPasswordParsed.setUsername(username);
 
   const passwordParsed = new Password();
-  passwordParsed.setType(newPassword.type);
-  passwordParsed.setPwd(newPassword.pwd);
-  passwordParsed.setUrl(newPassword.url);
-  passwordParsed.setNotes(newPassword.notes);
+  passwordParsed.setType(password.type);
+  passwordParsed.setPwd(password.pwd);
+  passwordParsed.setUrl(password.url);
+  passwordParsed.setNotes(password.notes);
   passwordParsed.setUsername(username);
 
   if (child) {
