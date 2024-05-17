@@ -82,15 +82,22 @@ router.put("/passwords", (req, res) => {
   const { username, password, newPassword } = req.body;
   const child = motherNode.searchChild(username);
 
-  const pwd = new Password();
-  pwd.setType(newPassword.type);
-  pwd.setPwd(newPassword.pwd);
-  pwd.setUrl(newPassword.url);
-  pwd.setNotes(newPassword.notes);
-  pwd.setUsername(username);
+  const newPasswordParsed = new Password();
+  newPasswordParsed.setType(newPassword.type);
+  newPasswordParsed.setPwd(newPassword.pwd);
+  newPasswordParsed.setUrl(newPassword.url);
+  newPasswordParsed.setNotes(newPassword.notes);
+  newPasswordParsed.setUsername(username);
+
+  const passwordParsed = new Password();
+  passwordParsed.setType(newPassword.type);
+  passwordParsed.setPwd(newPassword.pwd);
+  passwordParsed.setUrl(newPassword.url);
+  passwordParsed.setNotes(newPassword.notes);
+  passwordParsed.setUsername(username);
 
   if (child) {
-    child.updatePassword(child.findPassword(password), pwd);
+    child.updatePassword(passwordParsed, newPasswordParsed);
     res.send("Password Updated");
   } else {
     res.send("Child Not Found");
