@@ -1,10 +1,10 @@
 class Password {
   constructor(type, username, pwd, url, notes) {
-    this.type = "";
-    this.username = "";
-    this.pwd = "";
-    this.url = "";
-    this.notes = "";
+    this.type = type;
+    this.username = username;
+    this.pwd = pwd;
+    this.url = url;
+    this.notes = notes;
   }
 
   // Setters
