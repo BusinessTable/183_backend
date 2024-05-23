@@ -57,15 +57,18 @@ class ChildNode {
   }
 
   // Remove a password from the list
-  removePassword(password) {
-    let index = this.passwords.indexOf(password);
-    this.passwords.splice(index, 1);
+  removePassword(uuid) {
+    for (let i = 0; i < this.passwords.length; i++) {
+      if (this.passwords[i].getUUID() === uuid) {
+        this.passwords.splice(i, 1);
+      }
+    }
   }
 
   // Update a password in the list
-  updatePassword(password, newPassword) {
+  updatePassword(uuid, newPassword) {
     for (let i = 0; i < this.passwords.length; i++) {
-      if (this.passwords[i].getUUID() === password.getUUID()) {
+      if (this.passwords[i].getUUID() === uuid) {
         this.passwords[i] = newPassword;
       }
     }
