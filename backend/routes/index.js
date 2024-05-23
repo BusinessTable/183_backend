@@ -10,7 +10,11 @@ const Password = require("./Password.js");
 
 function noWayBack(pwd) {
   bcrypt.genSalt(saltRounds, function (err, salt) {
-    bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
+    bcrypt.hash(pwd, salt, function (err, hash) {
+      if (err) {
+        console.log(err);
+      }
+
       return { salt: salt, hash: hash };
     });
   });
