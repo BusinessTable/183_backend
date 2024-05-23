@@ -43,13 +43,13 @@ function generateAccessToken(payload) {
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  // if token is not there then return 401
-  if (token == null) return res.sendStatus(401);
-
   // if user tries to register or login then allow
   if (req.path === "/register" || req.path === "/login") {
     next();
   }
+
+  // if token is not there then return 401
+  if (token == null) return res.sendStatus(401);
 
   // otherwise verify the token
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
