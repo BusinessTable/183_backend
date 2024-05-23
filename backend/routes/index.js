@@ -77,9 +77,11 @@ router.get("/ping", (req, res) => {
 router.post("/register", (req, res) => {
   const { username, masterPassword } = req.body;
 
-  result = noWayBack(masterPassword);
+  const result = noWayBack(masterPassword);
 
   motherNode.createChild(username, result.hash, result.salt);
+
+  const child = motherNode.searchChild(username);
 
   console.log("gugus 1");
 
