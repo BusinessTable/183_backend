@@ -43,23 +43,20 @@ function generateAccessToken(payload) {
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  // check if req accesses register or login
+  // if token is not there then return 401
+  if (token == null) return res.sendStatus(401);
 
-  console.log(req.path);
-
+  // if user tries to register or login then allow
   if (req.path === "/register" || req.path === "/login") {
     next();
-    return;
-  } else {
-    if (token === null) return res.sendStatus(401);
-
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-      if (err) return res.sendStatus(403);
-      req.user = user;
-      next();
-    });
   }
-  next();
+
+  // otherwise verify the token
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
 };
 
 router.use(authenticateToken);
