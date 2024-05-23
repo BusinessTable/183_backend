@@ -85,19 +85,21 @@ router.post("/register", (req, res) => {
   const child = new Child(username, masterPassword);
   motherNode.addChild(child);
 
-  console.log(motherNode.getChildren());
+  console.log("gugus 1");
 
   const token = generateAccessToken({
     payload: child.getUsername() + child.getMasterPassword(),
   });
-  res.json(token);
+
+  console.log("gugus 2");
+
+  res.json(token).send("Register Successful");
 });
 
 router.post("/login", (req, res) => {
   const { username, masterPassword } = req.body;
   if (motherNode.validateMasterPassword(username, masterPassword)) {
     const token = generateAccessToken({ payload: username + masterPassword });
-    console.log("gugus");
     res.json(token).send("Login Successful");
   } else {
     res.sendStatus(400).send("Login Failed");
