@@ -44,6 +44,9 @@ const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   // check if req accesses register or login
+
+  console.log(req.path);
+
   if (req.path === "/register" || req.path === "/login") {
     next();
   }
