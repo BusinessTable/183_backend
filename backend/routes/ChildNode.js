@@ -61,6 +61,7 @@ class ChildNode {
     for (let i = 0; i < this.passwords.length; i++) {
       if (this.passwords[i].getUUID() === uuid) {
         this.passwords.splice(i, 1);
+        return true;
       }
     }
   }
@@ -70,6 +71,7 @@ class ChildNode {
     for (let i = 0; i < this.passwords.length; i++) {
       if (this.passwords[i].getUUID() === uuid) {
         this.passwords[i] = newPassword;
+        return true;
       }
     }
   }
