@@ -43,6 +43,11 @@ function generateAccessToken(payload) {
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
+  // check if req accesses register or login
+  if (req.path === "/register" || req.path === "/login") {
+    next();
+  }
+
   if (token === null) return res.sendStatus(401);
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
