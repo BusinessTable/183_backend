@@ -1,3 +1,5 @@
+const Child = require("./ChildNode.js");
+
 class MotherNode {
   constructor() {
     this.children = [];
@@ -55,6 +57,12 @@ class MotherNode {
       return child.getMasterPassword() === password;
     }
     return false;
+  }
+
+  // Create new Child
+  createChild(username, masterPassword, salt) {
+    const child = new Child(username, masterPassword, salt);
+    this.addChild(child);
   }
 }
 
