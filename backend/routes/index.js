@@ -52,6 +52,8 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+router.use(authenticateToken);
+
 // Middleware to authorize the user via masterpassword
 // const authorize = (req, res, next) => {
 //   const { username, masterPassword } = req.body;
