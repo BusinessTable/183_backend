@@ -50,15 +50,15 @@ const authenticateToken = (req, res, next) => {
   if (req.path === "/register" || req.path === "/login") {
     next();
     return;
+  } else if (token === null) {
+    return res.sendStatus(401);
+  } else {
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      next();
+    });
   }
-
-  if (token === null) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
 };
 
 router.use(authenticateToken);
