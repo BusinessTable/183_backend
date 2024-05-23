@@ -43,10 +43,6 @@ function generateAccessToken(payload) {
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  // if user tries to register or login then allow
-  if (req.baseUrl === "/register" || req.baseUrl === "/login") {
-    next();
-  }
 
   // if token is not there then return 401
   if (token == null) return res.sendStatus(401);
@@ -59,7 +55,14 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-router.use(authenticateToken);
+var unless = function (middleware, ...paths) {
+  return function (req, res, next) {
+    const pathCheck = paths.some((path) => path === req.path);
+    pathCheck ? next() : middleware(req, res, next);
+  };
+};
+
+router.use(unless(authenticateToken, "/register", "/login"));
 
 // Middleware to authorize the user via masterpassword
 // const authorize = (req, res, next) => {
