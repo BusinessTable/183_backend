@@ -44,7 +44,7 @@ const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   // if user tries to register or login then allow
-  if (req.path === "/register" || req.path === "/login") {
+  if (req.baseUrl === "/register" || req.baseUrl === "/login") {
     next();
   }
 
