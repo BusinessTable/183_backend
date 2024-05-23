@@ -36,7 +36,7 @@ router.use(function (req, res, next) {
 const motherNode = new MotherNode();
 
 function generateAccessToken(payload) {
-  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: "1800s" });
+  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: "900s" });
 }
 
 // Middleware to verify the token
@@ -49,6 +49,7 @@ const authenticateToken = (req, res, next) => {
 
   if (req.path === "/register" || req.path === "/login") {
     next();
+    return;
   }
 
   if (token === null) return res.sendStatus(401);
