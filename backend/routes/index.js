@@ -1,7 +1,9 @@
 var express = require("express");
 var router = express.Router();
 require("dotenv").config();
+const dotenv = require("dotenv");
 var session = require("express-session");
+const jwt = require("jsonwebtoken");
 const MotherNode = require("./MotherNode.js");
 const Child = require("./ChildNode.js");
 const Password = require("./Password.js");
@@ -33,6 +35,23 @@ router.use(function (req, res, next) {
 
 const motherNode = new MotherNode();
 
+function generateAccessToken(payload) {
+  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: "1800s" });
+}
+
+// Middleware to verify the token
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token === null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
 // Middleware to authorize the user via masterpassword
 // const authorize = (req, res, next) => {
 //   const { username, masterPassword } = req.body;
@@ -53,15 +72,21 @@ router.post("/register", (req, res) => {
   const { username, masterPassword } = req.body;
   const child = new Child(username, masterPassword);
   motherNode.addChild(child);
-  res.send(child);
+
+  const token = generateAccessToken({
+    payload: child.getUsername() + child.getMasterPassword(),
+  });
+  res.json(token);
 });
 
 router.post("/login", (req, res) => {
   const { username, masterPassword } = req.body;
   if (motherNode.validateMasterPassword(username, masterPassword)) {
-    res.send("Login Successful");
+    const token = generateAccessToken({ payload: username + masterPassword });
+
+    res.json(token).send("Login Successful");
   } else {
-    res.send("Login Failed");
+    res.sendStatus(400).send("Login Failed");
   }
 });
 
@@ -80,7 +105,7 @@ router.post("/passwords", (req, res) => {
     child.addPassword(pwd);
     res.send("Password Added");
   } else {
-    res.send("Child Not Found");
+    res.sendStatus(403).send("Child Not Found");
   }
 });
 
@@ -91,11 +116,11 @@ router.delete("/passwords", (req, res) => {
   if (child) {
     ok = child.removePassword(uuid);
     if (!ok) {
-      res.send("Password Not Found");
+      res.sendStatus(404).send("Password Not Found");
     }
-    res.send("Password Removed");
+    res.sendStatus(201).send("Password Removed");
   } else {
-    res.send("Child Not Found");
+    res.sendStatus(403).send("Child Not Found");
   }
 });
 
@@ -113,11 +138,11 @@ router.put("/passwords", (req, res) => {
   if (child) {
     ok = child.updatePassword(uuid, newPasswordParsed);
     if (!ok) {
-      res.send("Password Not Found");
+      res.sendStatus(404).send("Password Not Found");
     }
-    res.send("Password Updated");
+    res.sendStatus(201).send("Password Updated");
   } else {
-    res.send("Child Not Found");
+    res.sendStatus(403).send("Child Not Found");
   }
 });
 
