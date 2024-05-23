@@ -56,18 +56,6 @@ var unless = function (middleware, ...paths) {
 
 router.use(unless(authenticateToken, "/register", "/login"));
 
-// Middleware to authorize the user via masterpassword
-// const authorize = (req, res, next) => {
-//   const { username, masterPassword } = req.body;
-//   if (motherNode.validateMasterPassword(username, masterPassword)) {
-//     next();
-//   } else {
-//     res.send("Unauthorized");
-//   }
-// };
-
-// router.use(authorize);
-
 router.get("/ping", (req, res) => {
   res.send(new Date());
 });
