@@ -8,26 +8,12 @@ const MotherNode = require("./MotherNode.js");
 const Child = require("./ChildNode.js");
 const Password = require("./Password.js");
 
-function noWayBack(pwd) {
+async function noWayBack(pwd) {
   let result = { salt: "", hash: "" };
 
-  bcrypt.genSalt(saltRounds, function (err, salt) {
-    if (err) {
-      console.log(err);
-    }
-    console.log("salt: ", salt);
-    result.salt = salt;
-  });
+  result.salt = await bcrypt.genSalt(saltRounds);
 
-  console.log("result: ", result);
-
-  bcrypt.hash(pwd, result.salt, function (err, hash) {
-    if (err) {
-      console.log(err);
-    }
-    console.log("hash: ", hash);
-    result.hash = hash;
-  });
+  result.hash = await bcrypt.hash(pwd, result.salt);
   console.log("result: ", result);
 
   return result;
