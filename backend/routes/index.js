@@ -9,15 +9,19 @@ const Child = require("./ChildNode.js");
 const Password = require("./Password.js");
 
 function noWayBack(pwd) {
+  let result = { salt: "", hash: "" };
+
   bcrypt.genSalt(saltRounds, function (err, salt) {
     bcrypt.hash(pwd, salt, function (err, hash) {
       if (err) {
         console.log(err);
       }
 
-      return { salt: salt, hash: hash };
+      result = { salt: salt, hash: hash };
     });
   });
+
+  return result;
 }
 
 router.use(function (req, res, next) {
