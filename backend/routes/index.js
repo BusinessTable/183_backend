@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var path = require("path");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -54,6 +55,11 @@ var unless = function (middleware, ...paths) {
 };
 
 router.use(unless(authenticateToken, "/register", "/login"));
+
+router.get("/", (req, res) => {
+  // send file from directory
+  res.sendFile(path.join(__dirname, "../183_frontend/build", "index.html"));
+});
 
 router.get("/ping", (req, res) => {
   res.send(new Date());
