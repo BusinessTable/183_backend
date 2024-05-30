@@ -80,22 +80,22 @@ router.post("/register", (req, res) => {
   console.log("masterPassword: ", masterPassword);
 
   const result = noWayBack(masterPassword).then((result) => {
-    return result;
+    console.log("result: ", result);
+
+    const child = motherNode.createChild(username, result.hash, result.salt);
+
+    console.log("child: ", child);
+
+    const token = generateAccessToken({
+      payload: child.getUsername() + child.getMasterPassword(),
+    });
+
+    console.log("token: ", token);
+
+    res.json(token).send("Register Successful");
   });
 
-  console.log("result: ", result);
-
-  const child = motherNode.createChild(username, result.hash, result.salt);
-
-  console.log("child: ", child);
-
-  const token = generateAccessToken({
-    payload: child.getUsername() + child.getMasterPassword(),
-  });
-
-  console.log("token: ", token);
-
-  res.json(token).send("Register Successful");
+  res.status(500).send("Register Failed");
 });
 
 router.post("/login", (req, res) => {
