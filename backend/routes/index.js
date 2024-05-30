@@ -16,7 +16,8 @@ function noWayBack(pwd) {
       if (err) {
         console.log(err);
       }
-
+      console.log("salt: ", salt);
+      console.log("hash: ", hash);
       result = { salt: salt, hash: hash };
     });
   });
