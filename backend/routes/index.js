@@ -12,14 +12,19 @@ function noWayBack(pwd) {
   let result = { salt: "", hash: "" };
 
   bcrypt.genSalt(saltRounds, function (err, salt) {
-    bcrypt.hash(pwd, salt, function (err, hash) {
-      if (err) {
-        console.log(err);
-      }
-      console.log("salt: ", salt);
-      console.log("hash: ", hash);
-      result = { salt: salt, hash: hash };
-    });
+    if (err) {
+      console.log(err);
+    }
+    console.log("salt: ", salt);
+    result.salt = salt;
+  });
+
+  bcrypt.hash(pwd, salt, function (err, hash) {
+    if (err) {
+      console.log(err);
+    }
+    console.log("hash: ", hash);
+    result.hash = hash;
   });
 
   return result;
