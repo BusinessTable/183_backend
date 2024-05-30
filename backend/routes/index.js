@@ -79,9 +79,7 @@ router.get("/ping", (req, res) => {
 router.post("/register", (req, res) => {
   const { username, masterPassword } = req.body;
 
-  const tmp = motherNode.searchChild(username);
-
-  const result = noWayBack(masterPassword, tmp.getSalt())
+  const result = noWayBack(masterPassword, "")
     .then((result) => {
       const child = motherNode.createChild(username, result.hash, result.salt);
 
