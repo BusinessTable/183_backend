@@ -77,21 +77,22 @@ router.get("/ping", (req, res) => {
 router.post("/register", (req, res) => {
   const { username, masterPassword } = req.body;
 
-  console.log("gugus 0");
+  console.log("username: ", username);
+  console.log("masterPassword: ", masterPassword);
 
   const result = noWayBack(masterPassword);
 
-  motherNode.createChild(username, result.hash, result.salt);
+  console.log("result: ", result);
 
-  const child = motherNode.searchChild(username);
+  const child = motherNode.createChild(username, result.hash, result.salt);
 
-  console.log("gugus 1");
+  console.log("child: ", child);
 
   const token = generateAccessToken({
     payload: child.getUsername() + child.getMasterPassword(),
   });
 
-  console.log("gugus 2");
+  console.log("token: ", token);
 
   res.json(token).send("Register Successful");
 });

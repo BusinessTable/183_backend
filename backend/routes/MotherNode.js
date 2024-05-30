@@ -63,6 +63,7 @@ class MotherNode {
   createChild(username, masterPassword, salt) {
     const child = new Child(username, masterPassword, salt);
     this.addChild(child);
+    return child;
   }
 }
 
