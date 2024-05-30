@@ -24,6 +24,10 @@ class ChildNode {
     this.passwords = passwords;
   }
 
+  setSalt(salt) {
+    this.salt = salt;
+  }
+
   // Getters
 
   getUsername() {
@@ -40,6 +44,10 @@ class ChildNode {
 
   getPasswords() {
     return this.passwords;
+  }
+
+  getSalt() {
+    return this.salt;
   }
 
   // find password by uuid

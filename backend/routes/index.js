@@ -10,12 +10,8 @@ const Password = require("./Password.js");
 
 async function noWayBack(pwd) {
   let result = { salt: "", hash: "" };
-
   result.salt = await bcrypt.genSalt(saltRounds);
-
   result.hash = await bcrypt.hash(pwd, result.salt);
-  console.log("result: ", result);
-
   return result;
 }
 
@@ -76,24 +72,21 @@ router.get("/ping", (req, res) => {
 router.post("/register", (req, res) => {
   const { username, masterPassword } = req.body;
 
-  console.log("username: ", username);
-  console.log("masterPassword: ", masterPassword);
+  const tmp = motherNode.searchChild(username);
 
-  const result = noWayBack(masterPassword).then((result) => {
-    console.log("result: ", result);
+  const result = noWayBack(masterPassword, tmp.getSalt())
+    .then((result) => {
+      const child = motherNode.createChild(username, result.hash, result.salt);
 
-    const child = motherNode.createChild(username, result.hash, result.salt);
+      const token = generateAccessToken({
+        payload: child.getUsername() + child.getMasterPassword(),
+      });
 
-    console.log("child: ", child);
-
-    const token = generateAccessToken({
-      payload: child.getUsername() + child.getMasterPassword(),
+      res.json(token).send("Register Successful");
+    })
+    .catch((err) => {
+      console.log("Error: ", err);
     });
-
-    console.log("token: ", token);
-
-    res.json(token).send("Register Successful");
-  });
 
   if (!result) {
     res.sendStatus(400).send("Register Failed");
