@@ -8,17 +8,17 @@ const MotherNode = require("./MotherNode.js");
 const Child = require("./ChildNode.js");
 const Password = require("./Password.js");
 
-function noWayBack(pwd) {
-  bcrypt.genSalt(saltRounds, function (err, salt) {
-    bcrypt.hash(pwd, salt, function (err, hash) {
-      if (err) {
-        console.log(err);
-      }
+// function noWayBack(pwd) {
+//   bcrypt.genSalt(saltRounds, function (err, salt) {
+//     bcrypt.hash(pwd, salt, function (err, hash) {
+//       if (err) {
+//         console.log(err);
+//       }
 
-      return { salt: salt, hash: hash };
-    });
-  });
-}
+//       return { salt: salt, hash: hash };
+//     });
+//   });
+// }
 
 router.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
