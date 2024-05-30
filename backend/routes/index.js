@@ -19,6 +19,8 @@ function noWayBack(pwd) {
     result.salt = salt;
   });
 
+  console.log("result: ", result);
+
   bcrypt.hash(pwd, result.salt, function (err, hash) {
     if (err) {
       console.log(err);
@@ -26,6 +28,7 @@ function noWayBack(pwd) {
     console.log("hash: ", hash);
     result.hash = hash;
   });
+  console.log("result: ", result);
 
   return result;
 }
