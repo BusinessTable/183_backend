@@ -19,7 +19,7 @@ function noWayBack(pwd) {
     result.salt = salt;
   });
 
-  bcrypt.hash(pwd, salt, function (err, hash) {
+  bcrypt.hash(pwd, result.salt, function (err, hash) {
     if (err) {
       console.log(err);
     }
