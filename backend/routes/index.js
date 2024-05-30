@@ -95,7 +95,9 @@ router.post("/register", (req, res) => {
     res.json(token).send("Register Successful");
   });
 
-  res.status(500).send("Register Failed");
+  if (!result) {
+    res.sendStatus(400).send("Register Failed");
+  }
 });
 
 router.post("/login", (req, res) => {
