@@ -54,7 +54,7 @@ var unless = function (middleware, ...paths) {
   };
 };
 
-router.use(unless(authenticateToken, "/register", "/login"));
+router.use(unless(authenticateToken, "/register", "/login", "/"));
 
 router.get("/", (req, res) => {
   // send file from directory
