@@ -79,7 +79,9 @@ router.post("/register", (req, res) => {
   console.log("username: ", username);
   console.log("masterPassword: ", masterPassword);
 
-  const result = noWayBack(masterPassword);
+  const result = noWayBack(masterPassword).then((result) => {
+    return result;
+  });
 
   console.log("result: ", result);
 
