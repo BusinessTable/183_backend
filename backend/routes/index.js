@@ -8,11 +8,18 @@ const MotherNode = require("./MotherNode.js");
 const Child = require("./ChildNode.js");
 const Password = require("./Password.js");
 
-async function noWayBack(pwd) {
+async function noWayBack(pwd, salt) {
   let result = { salt: "", hash: "" };
-  result.salt = await bcrypt.genSalt(saltRounds);
-  result.hash = await bcrypt.hash(pwd, result.salt);
-  return result;
+
+  if (salt) {
+    result.salt = salt;
+    result.hash = await bcrypt.hash(pwd, result.salt);
+    return result;
+  } else {
+    result.salt = await bcrypt.genSalt(saltRounds);
+    result.hash = await bcrypt.hash(pwd, result.salt);
+    return result;
+  }
 }
 
 router.use(function (req, res, next) {
@@ -95,11 +102,26 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
   const { username, masterPassword } = req.body;
-  if (motherNode.validateMasterPassword(username, masterPassword)) {
-    const token = generateAccessToken({ payload: username + masterPassword });
-    res.json(token).send("Login Successful");
-  } else {
-    res.sendStatus(400).send("Login Failed");
+
+  const child = motherNode.searchChild(username);
+
+  const result = noWayBack(masterPassword, tmp.getSalt())
+    .then((result) => {
+      if (motherNode.validateMasterPassword(username, masterPassword)) {
+        const token = generateAccessToken({
+          payload: username + masterPassword,
+        });
+        res.json(token).send("Login Successful");
+      } else {
+        res.sendStatus(400).send("Login Failed");
+      }
+    })
+    .catch((err) => {
+      console.log("Error: ", err);
+    });
+
+  if (!result) {
+    res.sendStatus(400).send("Register Failed");
   }
 });
 
