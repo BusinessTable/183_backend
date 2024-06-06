@@ -54,14 +54,7 @@ var unless = function (middleware, ...paths) {
   };
 };
 
-router.use(
-  unless(authenticateToken, "/register", "/login", "/signup", "/signin")
-);
-
-router.get("/", (req, res) => {
-  // send file from directory
-  res.sendFile(path.join(__dirname, "../183_frontend/build", "index.html"));
-});
+router.use(unless(authenticateToken, "/register", "/login"));
 
 router.get("/ping", (req, res) => {
   res.send(new Date());
