@@ -26,15 +26,22 @@ app.set("port", port);
 /**
  * Create HTTP server.
  */
-var credentials = { key: privateKey, cert: certificate };
-var httpsServer = https.createServer(credentials, app);
-
+// var credentials = { key: privateKey, cert: certificate };
+// var httpsServer = https.createServer(/*credentials*/, app);
+//
 /**
  * Listen on provided port, on all network interfaces.
  */
-httpsServer.listen(port);
-httpsServer.on("error", onError);
-httpsServer.on("listening", onListening);
+// httpsServer.listen(port);
+// httpsServer.on("error", onError);
+// httpsServer.on("listening", onListening);
+
+app.listen(port, () => {
+  console.log(`Server is running on port: ${port}`);
+});
+
+app.on("error", onError);
+app.on("listening", onListening);
 
 /**
  * Normalize a port into a number, string, or false.
