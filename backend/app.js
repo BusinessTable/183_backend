@@ -12,7 +12,7 @@ var app = express();
 // Use cors middleware before any other middleware
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://139.162.128.79:3000/",
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
