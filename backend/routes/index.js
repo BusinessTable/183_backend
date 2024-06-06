@@ -60,10 +60,10 @@ router.get("/ping", (req, res) => {
   res.send(new Date());
 });
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const { username, masterPassword } = req.body;
 
-  const result = noWayBack(masterPassword, "")
+  const result = await noWayBack(masterPassword, "")
     .then((result) => {
       const child = motherNode.createChild(username, result.hash, result.salt);
 
