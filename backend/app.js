@@ -10,7 +10,12 @@ var indexRouter = require("./routes/index");
 var app = express();
 
 // Use cors middleware before any other middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
 app.use(logger("dev"));
 app.use(express.json());
