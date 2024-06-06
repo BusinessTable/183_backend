@@ -76,10 +76,6 @@ router.post("/register", (req, res) => {
     .catch((err) => {
       console.log("Error: ", err);
     });
-
-  if (!result) {
-    res.sendStatus(400).send("Register Failed");
-  }
 });
 
 router.post("/login", (req, res) => {
