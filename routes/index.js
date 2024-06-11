@@ -67,9 +67,15 @@ router.post("/register", async (req, res) => {
     .then((result) => {
       const child = motherNode.createChild(username, result.hash, result.salt);
 
-      const token = generateAccessToken({
-        payload: child.getUsername() + child.getMasterPassword(),
-      });
+      let expiresIn = new Date();
+      expiresIn.setSeconds(expiresIn.getSeconds() + 900);
+
+      const token = {
+        token: generateAccessToken({
+          payload: child.getUsername() + child.getMasterPassword(),
+        }),
+        expiresIn: expiresIn,
+      };
 
       res.json(token).send("Register Successful");
     })
@@ -86,9 +92,15 @@ router.post("/login", (req, res) => {
   const result = noWayBack(masterPassword, tmp.getSalt())
     .then((result) => {
       if (motherNode.validateMasterPassword(username, result.hash)) {
-        const token = generateAccessToken({
-          payload: username + masterPassword,
-        });
+        let expiresIn = new Date();
+        expiresIn.setSeconds(expiresIn.getSeconds() + 900);
+
+        const token = {
+          token: generateAccessToken({
+            payload: username + masterPassword,
+          }),
+          expiresIn: expiresIn,
+        };
 
         res.json(token).send("Login Successful");
       } else {
