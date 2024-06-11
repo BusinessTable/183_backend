@@ -14,7 +14,7 @@ async function noWayBack(pwd, salt) {
 
   if (salt) {
     result.salt = salt;
-    result.hash = await bcrypt.hash(pwd, result.salt);
+    result.hash = await bcrypt.hash(pwd, salt);
     return result;
   } else {
     result.salt = await bcrypt.genSalt(saltRounds);
@@ -81,14 +81,15 @@ router.post("/register", async (req, res) => {
 router.post("/login", (req, res) => {
   const { username, masterPassword } = req.body;
 
-  const child = motherNode.searchChild(username);
+  const tmp = motherNode.searchChild(username);
 
   const result = noWayBack(masterPassword, tmp.getSalt())
     .then((result) => {
-      if (motherNode.validateMasterPassword(username, masterPassword)) {
+      if (motherNode.validateMasterPassword(username, result.hash)) {
         const token = generateAccessToken({
           payload: username + masterPassword,
         });
+
         res.json(token).send("Login Successful");
       } else {
         res.sendStatus(400).send("Login Failed");
