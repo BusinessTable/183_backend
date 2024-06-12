@@ -77,7 +77,7 @@ router.post("/register", async (req, res) => {
         expiresIn: expiresIn,
       };
 
-      res.json(token).send("Register Successful");
+      res.json(token);
     })
     .catch((err) => {
       console.log("Error: ", err);
@@ -102,7 +102,7 @@ router.post("/login", (req, res) => {
           expiresIn: expiresIn,
         };
 
-        res.json(token).send("Login Successful");
+        res.json(token);
       } else {
         res.sendStatus(400).send("Login Failed");
       }
