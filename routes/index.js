@@ -73,7 +73,7 @@ router.post("/register", async (req, res) => {
       const token = {
         token: generateAccessToken({
           payload: child.getUsername() + child.getMasterPassword(),
-        }),
+        }).token,
         expiresIn: expiresIn,
       };
 
@@ -98,7 +98,7 @@ router.post("/login", (req, res) => {
         const token = {
           token: generateAccessToken({
             payload: username + masterPassword,
-          }),
+          }).token,
           expiresIn: expiresIn,
         };
 
