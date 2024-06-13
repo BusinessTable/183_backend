@@ -1,5 +1,6 @@
 class ChildNode {
   constructor(username, masterpassword, salt) {
+    this.token = "";
     this.username = username;
     this.masterpassword = masterpassword;
     this.salt = salt;
@@ -28,6 +29,10 @@ class ChildNode {
     this.salt = salt;
   }
 
+  setToken(token) {
+    this.token = token;
+  }
+
   // Getters
 
   getUsername() {
@@ -48,6 +53,10 @@ class ChildNode {
 
   getSalt() {
     return this.salt;
+  }
+
+  getToken() {
+    return this.token;
   }
 
   // find password by uuid

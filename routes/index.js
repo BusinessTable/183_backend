@@ -47,6 +47,24 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+// Middleware to verify the token
+const checkUserToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  const username = req.body.username;
+
+  // check if tkoen is for user
+  let child = motherNode.searchChild(username);
+  if (child.getToken() !== token) {
+    return res.sendStatus(401);
+  }
+
+  // if token is not there then return 401
+  if (token == null) return res.sendStatus(401);
+
+  next();
+};
+
 var unless = function (middleware, ...paths) {
   return function (req, res, next) {
     const pathCheck = paths.some((path) => path === req.path);
@@ -55,6 +73,7 @@ var unless = function (middleware, ...paths) {
 };
 
 router.use(unless(authenticateToken, "/register", "/login"));
+router.use(unless(checkUserToken, "/register", "/login"));
 
 router.get("/ping", (req, res) => {
   res.send(new Date());
@@ -82,6 +101,8 @@ router.post("/register", async (req, res) => {
         }).token,
         expiresIn: expiresIn,
       };
+
+      child.setToken(token.token);
 
       res.json(token);
     })
