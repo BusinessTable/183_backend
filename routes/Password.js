@@ -1,49 +1,15 @@
 class Password {
-  constructor(type, username, pwd, url, notes) {
+  constructor() {
     this.uuid = this.generateUUID();
-    this.type = type;
-    this.username = username;
-    this.pwd = pwd;
-    this.url = url;
-    this.notes = notes;
+    this.data = {};
   }
 
-  // Setters
-  setType(type) {
-    this.type = type;
-  }
-  setUsername(username) {
-    this.username = username;
-  }
-  setPwd(pwd) {
-    this.pwd = pwd;
-  }
-  setUrl(url) {
-    this.url = url;
-  }
-  setNotes(notes) {
-    this.notes = notes;
+  setData(data) {
+    this.data = data;
   }
 
-  setUUID(uuid) {
-    this.uuid = uuid;
-  }
-
-  // Getters
-  getType() {
-    return this.type;
-  }
-  getUsername() {
-    return this.username;
-  }
-  getPwd() {
-    return this.pwd;
-  }
-  getUrl() {
-    return this.url;
-  }
-  getNotes() {
-    return this.notes;
+  getData() {
+    return this.data;
   }
 
   getUUID() {

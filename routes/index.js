@@ -126,22 +126,20 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/passwords", (req, res) => {
-  const { username, password } = req.body;
-
-  const pwd = new Password();
-  pwd.setType(password.type);
-  pwd.setPwd(password.pwd);
-  pwd.setUrl(password.url);
-  pwd.setNotes(password.notes);
-  pwd.setUsername(username);
-
+  const { username, passwords } = req.body;
   const child = motherNode.searchChild(username);
-  if (child) {
-    child.addPassword(pwd);
-    res.send("Password Added");
-  } else {
+
+  if (!child) {
     res.sendStatus(403).send("Child Not Found");
   }
+
+  for (let password of passwords) {
+    const pwd = new Password();
+    pwd.setData(password);
+
+    child.addPassword(pwd);
+  }
+  res.sendStatus(201).send("Password Added");
 });
 
 router.delete("/passwords", (req, res) => {
@@ -164,11 +162,7 @@ router.put("/passwords", (req, res) => {
   const child = motherNode.searchChild(username);
 
   const newPasswordParsed = new Password();
-  newPasswordParsed.setType(newPassword.type);
-  newPasswordParsed.setPwd(newPassword.pwd);
-  newPasswordParsed.setUrl(newPassword.url);
-  newPasswordParsed.setNotes(newPassword.notes);
-  newPasswordParsed.setUsername(username);
+  newPasswordParsed.setData(newPassword);
 
   if (child) {
     ok = child.updatePassword(uuid, newPasswordParsed);
