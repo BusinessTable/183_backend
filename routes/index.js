@@ -130,6 +130,8 @@ router.post("/login", (req, res) => {
           expiresIn: expiresIn,
         };
 
+        tmp.setToken(token.token);
+
         res.json(token);
       } else {
         res.sendStatus(400).send("Login Failed");
