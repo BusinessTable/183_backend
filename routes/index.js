@@ -38,13 +38,7 @@ const authenticateToken = (req, res, next) => {
 
   // if token is not there then return 401
   if (token == null) return res.sendStatus(401);
-
-  // otherwise verify the token
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
+  next();
 };
 
 // Middleware to verify the token
@@ -147,7 +141,7 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/passwords/add", (req, res) => {
-  const { username, password } = req.body;
+  const { username, passwords } = req.body;
   const child = motherNode.searchChild(username);
 
   if (!child) {
@@ -155,10 +149,10 @@ router.post("/passwords/add", (req, res) => {
   }
 
   const pwd = new Password();
-  pwd.setData(password);
+  pwd.setData(passwords);
 
   child.addPassword(pwd);
-  
+
   res.sendStatus(201).send("Password Added");
 });
 
