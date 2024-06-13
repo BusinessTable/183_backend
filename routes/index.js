@@ -63,6 +63,12 @@ router.get("/ping", (req, res) => {
 router.post("/register", async (req, res) => {
   const { username, masterPassword } = req.body;
 
+  check = motherNode.searchChild(username);
+
+  if (check) {
+    res.sendStatus(400).send("User Already Exists");
+  }
+
   const result = await noWayBack(masterPassword, "")
     .then((result) => {
       const child = motherNode.createChild(username, result.hash, result.salt);
