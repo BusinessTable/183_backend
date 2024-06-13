@@ -146,7 +146,7 @@ router.post("/login", (req, res) => {
     });
 });
 
-router.post("/passwords", (req, res) => {
+router.post("/passwords/add", (req, res) => {
   const { username, passwords } = req.body;
   const child = motherNode.searchChild(username);
 
@@ -196,7 +196,7 @@ router.put("/passwords", (req, res) => {
   }
 });
 
-router.get("/passwords", (req, res) => {
+router.post("/passwords", (req, res) => {
   const { username } = req.body;
   const child = motherNode.searchChild(username);
   if (child) {
