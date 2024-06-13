@@ -66,7 +66,7 @@ router.post("/register", async (req, res) => {
   check = motherNode.searchChild(username);
 
   if (check) {
-    res.sendStatus(400).send("User Already Exists");
+    res.sendStatus(400);
   }
 
   const result = await noWayBack(masterPassword, "")
@@ -93,6 +93,13 @@ router.post("/register", async (req, res) => {
 router.post("/login", (req, res) => {
   const { username, masterPassword } = req.body;
 
+  check = motherNode.searchChild(username);
+
+  if (check == undefined) {
+    res.sendStatus(400);
+    return;
+  }
+
   const tmp = motherNode.searchChild(username);
 
   const result = noWayBack(masterPassword, tmp.getSalt())
@@ -116,10 +123,6 @@ router.post("/login", (req, res) => {
     .catch((err) => {
       console.log("Error: ", err);
     });
-
-  if (!result) {
-    res.sendStatus(400).send("Register Failed");
-  }
 });
 
 router.post("/passwords", (req, res) => {
