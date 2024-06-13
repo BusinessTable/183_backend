@@ -147,19 +147,18 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/passwords/add", (req, res) => {
-  const { username, passwords } = req.body;
+  const { username, password } = req.body;
   const child = motherNode.searchChild(username);
 
   if (!child) {
     res.sendStatus(403).send("Child Not Found");
   }
 
-  for (let password of passwords) {
-    const pwd = new Password();
-    pwd.setData(password);
+  const pwd = new Password();
+  pwd.setData(password);
 
-    child.addPassword(pwd);
-  }
+  child.addPassword(pwd);
+  
   res.sendStatus(201).send("Password Added");
 });
 
