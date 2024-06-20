@@ -42,12 +42,14 @@ class MotherNode {
 
   // search child by username
   searchChild(username) {
+    let child = null;
+
     this.children.forEach((element) => {
       if (element.getUsername() === username) {
-        return element;
+        child = element;
       }
     });
-    return null;
+    return child;
   }
 
   // validate give password with master password
