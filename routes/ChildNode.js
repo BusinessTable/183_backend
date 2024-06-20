@@ -6,6 +6,11 @@ class ChildNode {
     this.salt = salt;
     this.recoveryWords = [];
     this.passwords = [];
+
+    // make primary fields immutable
+    Object.freeze(this.username);
+    Object.freeze(this.masterpassword);
+    Object.freeze(this.salt);
   }
 
   // Setters
@@ -65,11 +70,11 @@ class ChildNode {
 
   // find password by uuid
   findPassword(password) {
-    for (let i = 0; i < this.passwords.length; i++) {
-      if (this.passwords[i].getUUID() === password.getUUID()) {
-        return this.passwords[i];
+    this.passwords.forEach((element) => {
+      if (element.getUUID() === password.getUUID()) {
+        return element;
       }
-    }
+    });
     return null;
   }
 
@@ -80,22 +85,19 @@ class ChildNode {
 
   // Remove a password from the list
   removePassword(uuid) {
-    for (let i = 0; i < this.passwords.length; i++) {
-      if (this.passwords[i].getUUID() === uuid) {
-        this.passwords.splice(i, 1);
-        return true;
-      }
-    }
+    this.passwords = this.passwords.filter(
+      (password) => password.getUUID() !== uuid
+    );
   }
 
   // Update a password in the list
   updatePassword(uuid, newPassword) {
-    for (let i = 0; i < this.passwords.length; i++) {
-      if (this.passwords[i].getUUID() === uuid) {
-        this.passwords[i] = newPassword;
-        return true;
+    this.passwords = this.passwords.map((password) => {
+      if (password.getUUID() === uuid) {
+        return newPassword;
       }
-    }
+      return password;
+    });
   }
 }
 

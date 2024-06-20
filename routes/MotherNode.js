@@ -42,11 +42,11 @@ class MotherNode {
 
   // search child by username
   searchChild(username) {
-    for (let i = 0; i < this.children.length; i++) {
-      if (this.children[i].getUsername() === username) {
-        return this.children[i];
+    this.children.forEach((element) => {
+      if (element.getUsername() === username) {
+        return element;
       }
-    }
+    });
     return null;
   }
 
