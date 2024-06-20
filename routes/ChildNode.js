@@ -51,6 +51,10 @@ class ChildNode {
     return this.passwords;
   }
 
+  getPasswordsPaged(page) {
+    return this.passwords.slice(page * 10 - 10, (page + 1) * 10 - 10);
+  }
+
   getSalt() {
     return this.salt;
   }

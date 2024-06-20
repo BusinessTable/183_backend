@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const MotherNode = require("./MotherNode.js");
-const Child = require("./ChildNode.js");
 const Password = require("./Password.js");
 
 async function noWayBack(pwd, salt) {
@@ -134,7 +133,7 @@ router.post("/login", (req, res) => {
 
         res.json(token);
       } else {
-        res.sendStatus(400).send("Login Failed");
+        res.status(400).send("Login Failed");
       }
     })
     .catch((err) => {
@@ -147,7 +146,7 @@ router.post("/passwords/add", (req, res) => {
   const child = motherNode.searchChild(username);
 
   if (!child) {
-    res.sendStatus(403).send("Child Not Found");
+    res.status(403).send("Child Not Found");
   }
 
   const pwd = new Password();
@@ -155,7 +154,7 @@ router.post("/passwords/add", (req, res) => {
 
   child.addPassword(pwd);
 
-  res.sendStatus(201).send("Password Added");
+  res.status(201).send("Password Added");
 });
 
 router.delete("/passwords", (req, res) => {
@@ -165,11 +164,11 @@ router.delete("/passwords", (req, res) => {
   if (child) {
     ok = child.removePassword(uuid);
     if (!ok) {
-      res.sendStatus(404).send("Password Not Found");
+      res.status(404).send("Password Not Found");
     }
-    res.sendStatus(201).send("Password Removed");
+    res.status(201).send("Password Removed");
   } else {
-    res.sendStatus(403).send("Child Not Found");
+    res.status(403).send("Child Not Found");
   }
 });
 
@@ -183,19 +182,27 @@ router.put("/passwords", (req, res) => {
   if (child) {
     ok = child.updatePassword(uuid, newPasswordParsed);
     if (!ok) {
-      res.sendStatus(404).send("Password Not Found");
+      res.status(404).send("Password Not Found");
     }
-    res.sendStatus(201).send("Password Updated");
+    res.status(201).send("Password Updated");
   } else {
-    res.sendStatus(403).send("Child Not Found");
+    res.status(403).send("Child Not Found");
   }
 });
 
 router.post("/passwords", (req, res) => {
-  const { username } = req.body;
+  const { username, page } = req.body;
   const child = motherNode.searchChild(username);
   if (child) {
-    res.send(child.getPasswords());
+    if (page) {
+      const pageInformation = {
+        totalPages: Math.ceil(child.getPasswords().length / 10),
+        passwords: child.getPasswordsPaged(page),
+      };
+      res.status(200).send(pageInformation);
+    } else {
+      res.status(200).send(child.getPasswords());
+    }
   } else {
     res.send("Child Not Found");
   }
