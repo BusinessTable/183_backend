@@ -159,12 +159,8 @@ router.post("/passwords/add", (req, res) => {
 router.delete("/passwords", (req, res) => {
   const { username, uuid } = req.body;
   const child = motherNode.searchChild(username);
-
   if (child) {
-    ok = child.removePassword(uuid);
-    if (!ok) {
-      res.status(404).send("Password Not Found");
-    }
+    child.removePassword(uuid);
     res.status(201).send("Password Removed");
   } else {
     res.status(403).send("Child Not Found");
