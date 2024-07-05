@@ -1,3 +1,5 @@
+const Rubrik = require("./Rubrik");
+
 class ChildNode {
   constructor(username, masterpassword, salt) {
     this.token = "";
@@ -6,6 +8,7 @@ class ChildNode {
     this.salt = salt;
     this.recoveryWords = [];
     this.passwords = [];
+    this.rubriken = [];
 
     // make primary fields immutable
     Object.freeze(this.username);
@@ -38,6 +41,10 @@ class ChildNode {
     this.token = token;
   }
 
+  setRubriken(rubriken) {
+    this.rubriken = rubriken;
+  }
+
   // Getters
 
   getUsername() {
@@ -66,6 +73,31 @@ class ChildNode {
 
   getToken() {
     return this.token;
+  }
+
+  getRubriken() {
+    return this.rubriken;
+  }
+
+  deleteRubrik(uuid) {
+    this.rubriken = this.rubriken.filter((rubrik) => rubrik.getUUID() !== uuid);
+  }
+
+  addRubrik(newRubrik) {
+    const rubrik = new Rubrik();
+    rubrik.setName(rubrik.name);
+
+    this.rubriken.push(rubrik);
+    return rubrik;
+  }
+
+  updateRubrik(uuid, newRubrik) {
+    this.rubriken = this.rubriken.map((rubrik) => {
+      if (rubrik.getUUID() === uuid) {
+        return newRubrik;
+      }
+      return rubrik;
+    });
   }
 
   // find password by uuid
