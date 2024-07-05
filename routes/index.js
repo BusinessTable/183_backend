@@ -203,4 +203,87 @@ router.post("/passwords", (req, res) => {
   }
 });
 
+router.post("/rubriken", (req, res) => {
+  const { username } = req.body;
+
+  const child = motherNode.searchChild(username);
+
+  if (child) {
+    res.status(200).send(child.getRubriken());
+  } else {
+    res.status(404).send("Child Not Found");
+  }
+});
+
+router.post("/rubriken/create", (req, res) => {
+  const { username, rubrik } = req.body;
+
+  const child = motherNode.searchChild(username);
+
+  if (child) {
+    const result = child.addRubrik(rubrik);
+    res.status(201).send(result);
+  }
+});
+
+router.delete("/rubriken", (req, res) => {
+  const { username, uuid } = req.body;
+  const child = motherNode.searchChild(username);
+
+  if (child) {
+    child.deleteRubrik(uuid);
+    res.status(201).send("Rubrik Removed");
+  } else {
+    res.status(403).send("Child Not Found");
+  }
+});
+
+router.put("/rubriken", (req, res) => {
+  const { username, uuid, newRubrik } = req.body;
+  const child = motherNode.searchChild(username);
+
+  if (child) {
+    child.updateRubrik(uuid, newRubrik);
+    res.status(201).send("Rubrik Updated");
+  } else {
+    res.status(403).send("Child Not Found");
+  }
+});
+
+router.post("/rubriken/passwords", (req, res) => {
+  const { username, uuid, passwordUUID } = req.body;
+  const child = motherNode.searchChild(username);
+
+  if (child) {
+    const rubrik = child
+      .getRubriken()
+      .find((rubrik) => rubrik.getUUID() === uuid);
+    if (rubrik) {
+      rubrik.addPassword(passwordUUID);
+      res.status(200).send(rubrik);
+    } else {
+      res.status(404).send("Rubrik Not Found");
+    }
+  }
+});
+
+router.delete("/rubriken/passwords", (req, res) => {
+  const { username, uuid, passwordUUID } = req.body;
+  const child = motherNode.searchChild(username);
+
+  if (child) {
+    const rubrik = child
+      .getRubriken()
+      .find((rubrik) => rubrik.getUUID() === uuid);
+    if (rubrik) {
+      rubrik.removePassword(passwordUUID);
+      res.status(201).send("Password Removed");
+    } else {
+      res.status(404).send("Rubrik Not Found");
+    }
+  } else {
+    res.status(403).send("Child Not Found");
+  }
+});
+
 module.exports = router;
