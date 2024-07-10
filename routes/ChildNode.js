@@ -68,7 +68,7 @@ class ChildNode {
         });
     }
 
-// Add a password to the list
+    // Add a password to the list
     addPassword(password) {
         this.passwords.push(password);
     }
