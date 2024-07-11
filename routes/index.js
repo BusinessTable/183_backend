@@ -8,17 +8,9 @@ const MotherNode = require("./MotherNode.js");
 const Password = require("./Password.js");
 
 async function noWayBack(pwd, salt) {
-    let result = {salt: "", hash: ""};
+    salt = salt ? salt : await bcrypt.genSalt(saltRounds);
 
-    if (salt) {
-        result.salt = salt;
-        result.hash = await bcrypt.hash(pwd, salt);
-        return result;
-    } else {
-        result.salt = await bcrypt.genSalt(saltRounds);
-        result.hash = await bcrypt.hash(pwd, result.salt);
-        return result;
-    }
+    return { salt: salt, hash: await bcrypt.hash(pwd, salt) };
 }
 
 const motherNode = new MotherNode();
@@ -57,7 +49,7 @@ const checkUserToken = (req, res, next) => {
     next();
 };
 
-// High Order Function to dinamically exclude paths
+// High Order Function to dinamically exclude paths with path array
 const unless = function (middleware, ...paths) {
     return function (req, res, next) {
         const pathCheck = paths.some((path) => path === req.path);
@@ -109,7 +101,7 @@ router.post("/login", (req, res) => {
 
     const check = motherNode.searchChild(username);
 
-    if (check === undefined) {
+    if (check) {
         res.sendStatus(400);
         return;
     }

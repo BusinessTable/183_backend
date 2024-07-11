@@ -82,14 +82,12 @@ class ChildNode {
 
     // Update a password in the list
     updatePassword(uuid, newPassword) {
-        const pwd = this.passwords = this.passwords.map((password) => {
+        return this.passwords = this.passwords.map((password) => {
             if (password.getUUID() === uuid) {
                 return newPassword;
             }
             return password;
         });
-
-        return pwd;
     }
 }
 
