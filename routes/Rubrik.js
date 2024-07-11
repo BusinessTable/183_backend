@@ -5,6 +5,8 @@ class Rubrik {
         this.name = name;
         this.passwords = [];
         this.uuid = generateUUID();
+
+        Object.freeze(this.uuid);
     }
 
     getUUID() {
